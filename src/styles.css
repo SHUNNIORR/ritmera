@@ -1,8 +1,18 @@
 /* ============================================================
-   Intervala – Global Styles
+   Ritmera – Global Styles
    ============================================================ */
 
 @import './styles/_tokens.css';
+
+/* ── Tipografía de marca (self-hosted para uso offline) ── */
+@font-face {
+  font-family: 'Ritmera Display';
+  src: url('/fonts/saira-italic-latin.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+}
 
 /* ── Reset ──────────────────────────────────────────────── */
 *,

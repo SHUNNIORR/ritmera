@@ -1,8 +1,8 @@
 {
-  "name": "Intervala · Temporizador de Intervalos",
-  "short_name": "Intervala",
-  "description": "PWA académica de temporizadores de intervalos, rutinas deportivas y entrenamientos estructurados.",
-  "theme_color": "#ff6b35",
+  "name": "Ritmera · Temporizador de Intervalos",
+  "short_name": "Ritmera",
+  "description": "Ritmera: temporizadores de intervalos, rutinas deportivas y entrenamientos estructurados.",
+  "theme_color": "#1a1a1e",
   "background_color": "#1a1a1e",
   "display": "standalone",
   "orientation": "any",

@@ -103,7 +103,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
         <h2 class="card-title">ℹ️ Transparencia de la Plataforma (PWA)</h2>
         <div class="platform-info-text">
           <p><strong>Almacenamiento Local (Local-First):</strong> Tus rutinas e historial se guardan en <code>IndexedDB</code> en este dispositivo. Si borras la caché o datos del navegador, podrían perderse. Haz copias de seguridad periódicas.</p>
-          <p><strong>Segundo Plano y Suspensión:</strong> Las PWAs dependen de las políticas del sistema operativo. En sistemas como <strong>iOS (Safari)</strong>, el hilo de JavaScript se suspende cuando sales de la app. Intervala recalcula el tiempo exacto mediante marcas de tiempo al reabrir la app, pero no puede garantizar alertas sonoras continuas si la pantalla se bloquea.</p>
+          <p><strong>Segundo Plano y Suspensión:</strong> Las PWAs dependen de las políticas del sistema operativo. En sistemas como <strong>iOS (Safari)</strong>, el hilo de JavaScript se suspende cuando sales de la app. Ritmera recalcula el tiempo exacto mediante marcas de tiempo al reabrir la app, pero no puede garantizar alertas sonoras continuas si la pantalla se bloquea.</p>
         </div>
       </section>
 

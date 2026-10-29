@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Export/Import Service
+// Ritmera – Export/Import Service
 // Exporta e importa un JSON versionado con validación.
 // ============================================================
 
@@ -57,7 +57,7 @@ export class ExportImportService {
     const date = new Date().toISOString().split('T')[0];
     const a = document.createElement('a');
     a.href = url;
-    a.download = `intervala-backup-${date}.json`;
+    a.download = `ritmera-backup-${date}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }

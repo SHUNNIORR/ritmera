@@ -10,7 +10,7 @@ export const routes: Routes = [
     path: 'biblioteca',
     loadComponent: () =>
       import('./features/library/library.component').then(m => m.LibraryComponent),
-    title: 'Biblioteca · Intervala',
+    title: 'Biblioteca · Ritmera',
   },
   {
     path: 'rutina/nueva',
@@ -18,7 +18,7 @@ export const routes: Routes = [
       import('./features/routine-editor/routine-editor.component').then(
         m => m.RoutineEditorComponent
       ),
-    title: 'Nueva rutina · Intervala',
+    title: 'Nueva rutina · Ritmera',
   },
   {
     path: 'rutina/:id/editar',
@@ -26,7 +26,7 @@ export const routes: Routes = [
       import('./features/routine-editor/routine-editor.component').then(
         m => m.RoutineEditorComponent
       ),
-    title: 'Editar rutina · Intervala',
+    title: 'Editar rutina · Ritmera',
   },
   {
     path: 'temporizador/:id',
@@ -34,7 +34,7 @@ export const routes: Routes = [
       import('./features/timer-runner/timer-runner.component').then(
         m => m.TimerRunnerComponent
       ),
-    title: 'Temporizador · Intervala',
+    title: 'Temporizador · Ritmera',
   },
   {
     path: 'temporizador-rapido',
@@ -42,19 +42,19 @@ export const routes: Routes = [
       import('./features/timer-runner/timer-runner.component').then(
         m => m.TimerRunnerComponent
       ),
-    title: 'Temporizador rápido · Intervala',
+    title: 'Temporizador rápido · Ritmera',
   },
   {
     path: 'historial',
     loadComponent: () =>
       import('./features/history/history.component').then(m => m.HistoryComponent),
-    title: 'Historial · Intervala',
+    title: 'Historial · Ritmera',
   },
   {
     path: 'ajustes',
     loadComponent: () =>
       import('./features/settings/settings.component').then(m => m.SettingsComponent),
-    title: 'Ajustes · Intervala',
+    title: 'Ajustes · Ritmera',
   },
   {
     path: '**',

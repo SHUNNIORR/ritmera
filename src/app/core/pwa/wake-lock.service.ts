@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Wake Lock Service
+// Ritmera – Wake Lock Service
 // Mantiene la pantalla activa durante sesiones.
 // Sólo disponible en Chrome/Edge (no iOS).
 // ============================================================

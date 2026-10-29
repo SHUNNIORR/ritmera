@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Timer Engine Utils
+// Ritmera – Timer Engine Utils
 // Funciones puras: no dependen de Angular, 100% testeables.
 // ============================================================
 

@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Plantillas predefinidas de rutinas
+// Ritmera – Plantillas predefinidas de rutinas
 // ============================================================
 
 import { Routine, SCHEMA_VERSION } from './timer-engine.types';

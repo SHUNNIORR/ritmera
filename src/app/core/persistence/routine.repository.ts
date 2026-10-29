@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Routine Repository
+// Ritmera – Routine Repository
 // ============================================================
 
 import { Injectable } from '@angular/core';
@@ -75,11 +75,21 @@ export class RoutineRepository {
     return this.db.routines.count();
   }
 
-  async seedDefaultTemplates(): Promise<void> {
+  private seedPromise?: Promise<void>;
+
+  seedDefaultTemplates(): Promise<void> {
+    // Comparte una sola siembra entre AppComponent y la biblioteca para
+    // evitar duplicados y lecturas incompletas en el primer arranque.
+    this.seedPromise ??= this.seedTemplatesOnce().catch(error => {
+      this.seedPromise = undefined;
+      throw error;
+    });
+    return this.seedPromise;
+  }
+
+  private async seedTemplatesOnce(): Promise<void> {
     const existing = await this.count();
     if (existing > 0) return;
-    for (const template of defaultTemplates()) {
-      await this.db.routines.put(template);
-    }
+    await this.db.routines.bulkPut(defaultTemplates());
   }
 }

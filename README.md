@@ -1,4 +1,4 @@
-# Intervala · Progressive Web App (PWA) de Temporizadores de Intervalos
+# Ritmera · Progressive Web App (PWA) de Temporizadores de Intervalos
 
 > **Proyecto Académico** inspirado en conceptos de temporizadores de entrenamiento físico (como Timer Plus), implementado con identidad propia, arquitectura local-first, motor de reloj desacoplado basado en marcas de tiempo y cumplimiento de estándares web modernos.
 
@@ -6,7 +6,7 @@
 
 ## 1. Descripción y alcance académico
 
-**Intervala** es una Progressive Web App (PWA) diseñada para crear, estructurar, personalizar y ejecutar rutinas de intervalos (HIIT, Tabata, EMOM, descansos de fuerza, estiramientos o bloques de concentración tipo Pomodoro).
+**Ritmera** es una Progressive Web App (PWA) diseñada para crear, estructurar, personalizar y ejecutar rutinas de intervalos (HIIT, Tabata, EMOM, descansos de fuerza, estiramientos o bloques de concentración tipo Pomodoro).
 
 El proyecto tiene propósitos estrictamente académicos y de investigación en ingeniería de software frontend:
 - Demostrar el diseño y la fiabilidad de un **motor de temporización desacoplado** capaz de resistir ralentizaciones y suspensiones de pestañas o dispositivos sin derivas de tiempo acumulativas.
@@ -108,7 +108,7 @@ Abre tu navegador en `http://localhost:4200/`.
 | Comando | Acción |
 |---|---|
 | `npm start` | Inicia la aplicación en modo desarrollo en `http://localhost:4200/`. |
-| `npm run build` | Compila la aplicación para producción en la carpeta `dist/intervala/browser` con optimizaciones, hashing y service worker. |
+| `npm run build` | Compila la aplicación para producción en la carpeta `dist/ritmera/browser` con optimizaciones, hashing y service worker. |
 | `npm test` | Ejecuta las pruebas unitarias automatizadas con Jest. |
 | `npm run test:e2e` | Ejecuta las pruebas end-to-end con Playwright. |
 
@@ -142,7 +142,7 @@ npm run test:e2e
 ```bash
 npm run build
 ```
-Los artefactos compilados se generan en `dist/intervala/browser`, incluyendo:
+Los artefactos compilados se generan en `dist/ritmera/browser`, incluyendo:
 - Archivos JavaScript optimizados con carga diferida (*lazy loading*).
 - Hojas de estilo CSS minificadas.
 - Manifiesto de PWA (`manifest.webmanifest`).
@@ -165,13 +165,13 @@ Los artefactos compilados se generan en `dist/intervala/browser`, incluyendo:
 
 ### En Escritorio (Chrome / Edge / Safari macOS Sonoma+):
 1. Haz clic en el icono de instalación situado en la barra de direcciones del navegador.
-2. Intervala se instalará como aplicación de escritorio nativa.
+2. Ritmera se instalará como aplicación de escritorio nativa.
 
 ---
 
 ## 10. Persistencia local de datos y seguridad
 
-- **Motor de persistencia:** Todos los datos se gestionan mediante **IndexedDB** a través de la base de datos `intervala-db`.
+- **Motor de persistencia:** Todos los datos se gestionan mediante **IndexedDB** a través de la base de datos `intervala-db` (nombre interno conservado para no perder datos existentes).
 - **Tablas:**
   - `routines`: Definición de rutinas, etapas, bloques, colores y configuración.
   - `history`: Registro histórico de sesiones completadas o interrumpidas.
@@ -189,7 +189,7 @@ Los artefactos compilados se generan en `dist/intervala/browser`, incluyendo:
 > [!WARNING]
 > **Políticas de segundo plano en iOS (Safari):**  
 > En dispositivos iOS, cuando la pantalla se bloquea o el usuario cambia de app, WebKit suspende la ejecución de JavaScript de forma agresiva.
-> **Comportamiento en Intervala:** Intervala no confía en un `setInterval` continuo. Al reactivar la aplicación (`pageshow` o `visibilitychange`), el motor de temporización compara la marca de tiempo actual (`Date.now()`) contra `stepDeadlineAt`, deduce cuántas etapas se vencieron durante la suspensión y restaura la pantalla en la etapa y segundo exactos. No obstante, las alertas sonoras en segundo plano profundo con pantalla apagada en iOS requieren aplicaciones nativas con capacidades de audio background específicas.
+> **Comportamiento en Ritmera:** Ritmera no confía en un `setInterval` continuo. Al reactivar la aplicación (`pageshow` o `visibilitychange`), el motor de temporización compara la marca de tiempo actual (`Date.now()`) contra `stepDeadlineAt`, deduce cuántas etapas se vencieron durante la suspensión y restaura la pantalla en la etapa y segundo exactos. No obstante, las alertas sonoras en segundo plano profundo con pantalla apagada en iOS requieren aplicaciones nativas con capacidades de audio background específicas.
 
 > [!NOTE]
 > **Screen Wake Lock API:**  
@@ -197,7 +197,7 @@ Los artefactos compilados se generan en `dist/intervala/browser`, incluyendo:
 
 > [!NOTE]
 > **SpeechSynthesis (Guía por voz):**  
-> Algunos navegadores móviles requieren una interacción táctil previa antes de permitir la emisión de voz. Si el motor de voz no está disponible o falla, Intervala mantiene todas las alertas visuales y sonoras alternativas.
+> Algunos navegadores móviles requieren una interacción táctil previa antes de permitir la emisión de voz. Si el motor de voz no está disponible o falla, Ritmera mantiene todas las alertas visuales y sonoras alternativas.
 
 ---
 

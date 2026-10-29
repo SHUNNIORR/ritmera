@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Timer Engine Types
+// Ritmera – Timer Engine Types
 // Todas las duraciones en milisegundos internamente.
 // Las fechas son epoch ms (Date.now()).
 // ============================================================

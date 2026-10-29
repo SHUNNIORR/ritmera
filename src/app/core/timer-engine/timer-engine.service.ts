@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Timer Engine Service
+// Ritmera – Timer Engine Service
 // Máquina de estados del temporizador. Sin dependencias de UI.
 // Se puede usar desde Angular o en pruebas aisladas.
 // ============================================================

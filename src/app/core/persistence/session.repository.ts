@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Session Repository
+// Ritmera – Session Repository
 // ============================================================
 
 import { Injectable } from '@angular/core';

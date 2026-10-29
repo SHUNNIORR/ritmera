@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Speech Service (SpeechSynthesis API)
+// Ritmera – Speech Service (SpeechSynthesis API)
 // Degradación elegante cuando no está disponible.
 // ============================================================
 

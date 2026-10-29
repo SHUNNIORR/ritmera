@@ -1,8 +1,10 @@
 /* ============================================================
-   Intervala – Design Tokens
+   Ritmera – Design Tokens
    ============================================================ */
 
 :root {
+  color-scheme: dark;
+
   /* ── Colores base (tema oscuro predeterminado) ─────────── */
   --color-bg-primary: #1a1a1e;
   --color-bg-secondary: #222228;
@@ -53,6 +55,7 @@
 
   /* ── Tipografía ────────────────────────────────────────── */
   --font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-brand: 'Ritmera Display', 'Inter', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
 
   --font-size-xs: 0.75rem;    /* 12px */
@@ -113,6 +116,8 @@
 
 /* ── Tema claro ─────────────────────────────────────────── */
 [data-theme='light'] {
+  color-scheme: light;
+
   --color-bg-primary: #f5f5f7;
   --color-bg-secondary: #ffffff;
   --color-bg-elevated: #ffffff;

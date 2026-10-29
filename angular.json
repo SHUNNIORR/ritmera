@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "intervala": {
+    "ritmera": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -41,7 +41,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/intervala",
+            "outputPath": "dist/ritmera",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -69,8 +69,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "8kB",
-                  "maximumError": "16kB"
+                  "maximumWarning": "16kB",
+                  "maximumError": "24kB"
                 }
               ],
               "outputHashing": "all",
@@ -88,10 +88,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "intervala:build:production"
+              "buildTarget": "ritmera:build:production"
             },
             "development": {
-              "buildTarget": "intervala:build:development"
+              "buildTarget": "ritmera:build:development"
             }
           },
           "defaultConfiguration": "development"

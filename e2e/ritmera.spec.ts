@@ -1,31 +1,39 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Intervala PWA - Flujos principales', () => {
+test.describe('Ritmera PWA - Flujos principales', () => {
 
   test('1. Abre la aplicación y muestra la biblioteca con plantillas precargadas', async ({ page }) => {
     await page.goto('/biblioteca');
 
-    // Comprobar branding Intervala
-    await expect(page.locator('.app-logo-text')).toHaveText('Intervala');
-
-    // Comprobar botones de acción principales
-    await expect(page.getByRole('link', { name: 'Crear rutina' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Temporizador rápido' })).toBeVisible();
+    // Comprobar branding Ritmera
+    await expect(page.locator('.app-logo-text')).toHaveText('Ritmera');
 
     // Comprobar que las plantillas por defecto se precargaron
     await expect(page.locator('.routine-card')).toHaveCount(4);
     await expect(page.locator('text=Tabata clásico')).toBeVisible();
+
+    // Comprobar acciones principales según el breakpoint
+    const width = page.viewportSize()?.width ?? 1024;
+    if (width < 1024) {
+      // En móvil las acciones viven en el FAB + hoja inferior
+      await expect(page.locator('.fab')).toBeVisible();
+      await page.locator('.fab').click();
+      const sheet = page.locator('.create-sheet');
+      await expect(sheet.getByRole('link', { name: 'Crear rutina' })).toBeVisible();
+      await expect(sheet.getByRole('link', { name: 'Temporizador rápido' })).toBeVisible();
+      await page.keyboard.press('Escape');
+    } else {
+      const actions = page.locator('.library-actions');
+      await expect(actions.getByRole('link', { name: 'Crear rutina' })).toBeVisible();
+      await expect(actions.getByRole('link', { name: 'Temporizador rápido' })).toBeVisible();
+    }
   });
 
-  test('2. Crear una nueva rutina con varias etapas y persistencia tras recarga', async ({ page }) => {
+  test('2. Crear una nueva rutina desde plantilla y persistencia tras recarga', async ({ page }) => {
     await page.goto('/rutina/nueva');
 
-    // Rellenar datos de rutina
-    await page.fill('#routine-name', 'Rutina E2E Test');
-    await page.fill('#routine-desc', 'Descripción de prueba automatizada');
-
-    // Configurar etapa inicial
-    await page.locator('.step-name-input').first().fill('Calentamiento E2E');
+    // Rellenar datos de la rutina (la plantilla Tabata es la predeterminada)
+    await page.locator('#tabata-name').fill('Rutina E2E Test');
 
     // Guardar
     await page.getByRole('button', { name: 'Guardar' }).click();
@@ -99,13 +107,37 @@ test.describe('Intervala PWA - Flujos principales', () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/biblioteca');
     await expect(page.locator('.bottom-nav')).toBeVisible();
+    await expect(page.locator('.fab')).toBeVisible();
+    await expect(page.locator('.header-search')).toBeVisible();
 
     // Vista escritorio
     await page.setViewportSize({ width: 1200, height: 800 });
     await expect(page.locator('.app-shell')).toBeVisible();
+    await expect(page.locator('.library-actions')).toBeVisible();
+    await expect(page.locator('.fab')).toBeHidden();
+    await expect(page.locator('.sort-control--desktop')).toBeVisible();
   });
 
-  test('8. Resiliencia ante ausencia de Wake Lock / Speech Synthesis', async ({ page }) => {
+  test('8. Búsqueda global y creación desde el FAB en móvil', async ({ page }) => {
+    const width = page.viewportSize()?.width ?? 1024;
+    await page.goto('/biblioteca');
+    await expect(page.locator('.routine-card')).toHaveCount(4);
+
+    // La búsqueda de la cabecera filtra en vivo
+    await page.locator('.header-search-input').fill('tabata');
+    await expect(page.locator('.routine-card')).toHaveCount(1);
+    await page.locator('.header-search-clear').click();
+    await expect(page.locator('.routine-card')).toHaveCount(4);
+
+    if (width < 1024) {
+      await page.locator('.fab').click();
+      await expect(page.locator('.create-sheet')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.locator('.create-sheet')).toBeHidden();
+    }
+  });
+
+  test('9. Resiliencia ante ausencia de Wake Lock / Speech Synthesis', async ({ page }) => {
     // Sobrescribir APIs en la página para simular navegadores sin soporte
     await page.addInitScript(() => {
       delete (navigator as any).wakeLock;

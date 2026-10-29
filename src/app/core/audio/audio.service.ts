@@ -1,5 +1,5 @@
 // ============================================================
-// Intervala – Audio Service (Web Audio API)
+// Ritmera – Audio Service (Web Audio API)
 // Genera tonos localmente, funciona offline.
 // ============================================================
 
