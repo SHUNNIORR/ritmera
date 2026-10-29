@@ -47,7 +47,7 @@ test.describe('Intervala PWA - Flujos principales', () => {
     await menuBtn.click();
 
     // Duplicar
-    await page.getByRole('menuitem', { name: /Duplicar/i }).click();
+    await page.locator('.action-sheet-btn', { hasText: 'Duplicar' }).click();
 
     // Comprobar que se ha creado la copia
     await expect(page.locator('text=(copia)')).toBeVisible();
