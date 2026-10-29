@@ -1,7 +1,7 @@
 import {
   Component, OnInit, signal, computed, inject, Input
 } from '@angular/core';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RoutineRepository } from '../../core/persistence/routine.repository';
 import {
@@ -48,7 +48,7 @@ interface TemplateOption {
 
 @Component({
     selector: 'app-routine-editor',
-    imports: [RouterLink, FormsModule, ReactiveFormsModule, DurationInputComponent, ConfirmDialogComponent, DurationPipe],
+    imports: [FormsModule, ReactiveFormsModule, DurationInputComponent, ConfirmDialogComponent, DurationPipe],
     template: `
     <div class="editor-page">
       <header class="editor-header">
