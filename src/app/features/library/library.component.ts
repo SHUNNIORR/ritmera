@@ -141,42 +141,16 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
                     Iniciar
                   </a>
 
-                  <!-- Menú de opciones -->
-                  <div class="routine-menu">
-                    <button class="btn btn-ghost btn-icon routine-menu-btn"
-                            [attr.aria-label]="'Opciones para ' + routine.name"
-                            [attr.aria-expanded]="openMenuId() === routine.id"
-                            (click)="toggleMenu(routine.id, $event)">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <circle cx="12" cy="5" r="1.5"/>
-                        <circle cx="12" cy="12" r="1.5"/>
-                        <circle cx="12" cy="19" r="1.5"/>
-                      </svg>
-                    </button>
-
-                    @if (openMenuId() === routine.id) {
-                      <div class="dropdown-menu" role="menu"
-                           [attr.aria-label]="'Acciones para ' + routine.name">
-                        <a [routerLink]="['/rutina', routine.id, 'editar']"
-                           class="dropdown-item" role="menuitem" (click)="closeMenu()">
-                          ✏️ Editar
-                        </a>
-                        <button class="dropdown-item" role="menuitem"
-                                (click)="duplicate(routine); closeMenu()">
-                          📋 Duplicar
-                        </button>
-                        <button class="dropdown-item" role="menuitem"
-                                (click)="toggleFavorite(routine); closeMenu()">
-                          {{ routine.isFavorite ? '★ Quitar favorita' : '☆ Marcar favorita' }}
-                        </button>
-                        <hr class="dropdown-divider" />
-                        <button class="dropdown-item danger" role="menuitem"
-                                (click)="confirmDelete(routine); closeMenu()">
-                          🗑️ Eliminar
-                        </button>
-                      </div>
-                    }
-                  </div>
+                  <!-- Botón de opciones -->
+                  <button class="btn btn-ghost btn-icon routine-menu-btn"
+                          [attr.aria-label]="'Opciones para ' + routine.name"
+                          (click)="openRoutineMenu(routine, $event)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <circle cx="12" cy="5" r="1.5"/>
+                      <circle cx="12" cy="12" r="1.5"/>
+                      <circle cx="12" cy="19" r="1.5"/>
+                    </svg>
+                  </button>
                 </div>
               </li>
             }
@@ -184,6 +158,58 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
         }
       </main>
     </div>
+
+    <!-- Menú flotante / Action Sheet sobre la aplicación -->
+    @if (activeMenuRoutine()) {
+      <div class="action-sheet-backdrop" (click)="closeMenu()" role="presentation">
+        <div class="action-sheet-modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" [attr.aria-label]="'Opciones de ' + activeMenuRoutine()!.name">
+          <div class="action-sheet-header">
+            <div class="action-sheet-title-group">
+              <span class="action-sheet-category">{{ categoryLabel(activeMenuRoutine()!.category) }}</span>
+              <h3 class="action-sheet-name">{{ activeMenuRoutine()!.name }}</h3>
+            </div>
+            <button class="btn btn-ghost btn-icon btn-close-sheet" (click)="closeMenu()" aria-label="Cerrar opciones">✕</button>
+          </div>
+
+          <div class="action-sheet-options">
+            <a [routerLink]="['/rutina', activeMenuRoutine()!.id, 'editar']"
+               class="action-sheet-btn" (click)="closeMenu()">
+              <span class="sheet-icon" aria-hidden="true">✏️</span>
+              <div class="sheet-texts">
+                <span class="sheet-primary">Editar rutina</span>
+                <span class="sheet-secondary">Modificar etapas, tiempos y descansos</span>
+              </div>
+            </a>
+
+            <button type="button" class="action-sheet-btn" (click)="duplicate(activeMenuRoutine()!); closeMenu()">
+              <span class="sheet-icon" aria-hidden="true">📋</span>
+              <div class="sheet-texts">
+                <span class="sheet-primary">Duplicar</span>
+                <span class="sheet-secondary">Crear una copia exacta para personalizar</span>
+              </div>
+            </button>
+
+            <button type="button" class="action-sheet-btn" (click)="toggleFavorite(activeMenuRoutine()!); closeMenu()">
+              <span class="sheet-icon" aria-hidden="true">{{ activeMenuRoutine()!.isFavorite ? '★' : '☆' }}</span>
+              <div class="sheet-texts">
+                <span class="sheet-primary">{{ activeMenuRoutine()!.isFavorite ? 'Quitar de favoritas' : 'Marcar como favorita' }}</span>
+                <span class="sheet-secondary">{{ activeMenuRoutine()!.isFavorite ? 'Desmarcar de favoritos' : 'Fijar en destacados' }}</span>
+              </div>
+            </button>
+
+            <hr class="action-sheet-divider" />
+
+            <button type="button" class="action-sheet-btn danger" (click)="confirmDelete(activeMenuRoutine()!); closeMenu()">
+              <span class="sheet-icon" aria-hidden="true">🗑️</span>
+              <div class="sheet-texts">
+                <span class="sheet-primary">Eliminar rutina</span>
+                <span class="sheet-secondary">Borrar permanentemente de este dispositivo</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
 
     <!-- Diálogo de confirmación -->
     @if (deletingRoutine()) {
@@ -282,7 +308,7 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       background: var(--color-bg-card);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
-      overflow: hidden;
+      position: relative;
       box-shadow: var(--shadow-sm);
       transition: box-shadow var(--duration-normal) var(--easing-default);
     }
@@ -292,6 +318,8 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       width: 4px;
       flex-shrink: 0;
       background: var(--routine-color, var(--color-accent));
+      border-top-left-radius: var(--radius-lg);
+      border-bottom-left-radius: var(--radius-lg);
     }
 
     .routine-info {
@@ -352,39 +380,143 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       min-height: 36px;
     }
 
-    /* Menú desplegable */
-    .routine-menu { position: relative; }
-    .dropdown-menu {
-      position: absolute;
-      right: 0;
-      top: calc(100% + 4px);
-      background: var(--color-bg-elevated);
-      border: 1px solid var(--color-border-strong);
-      border-radius: var(--radius-md);
-      min-width: 180px;
-      box-shadow: var(--shadow-lg);
-      z-index: 50;
-      overflow: hidden;
+    /* Action Sheet / Menú flotante sobre la app */
+    .action-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
       animation: fadeIn var(--duration-fast) var(--easing-default);
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-    .dropdown-item {
-      display: block;
+
+    .action-sheet-modal {
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      width: 100%;
+      max-width: 480px;
+      padding: var(--space-4);
+      padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+      box-shadow: var(--shadow-lg);
+      animation: slideUpSheet var(--duration-normal) var(--easing-default);
+    }
+
+    @keyframes slideUpSheet {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+
+    @media (min-width: 640px) {
+      .action-sheet-backdrop {
+        align-items: center;
+        padding: var(--space-4);
+      }
+      .action-sheet-modal {
+        border-radius: var(--radius-xl);
+        padding-bottom: var(--space-4);
+        animation: scaleSheet var(--duration-fast) var(--easing-default);
+      }
+      @keyframes scaleSheet {
+        from { transform: scale(0.94); opacity: 0; }
+        to   { transform: scale(1); opacity: 1; }
+      }
+    }
+
+    .action-sheet-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-2);
+    }
+    .action-sheet-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+    }
+    .action-sheet-category {
+      font-size: var(--font-size-xs);
+      color: var(--color-accent);
+      text-transform: uppercase;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.05em;
+    }
+    .action-sheet-name {
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-close-sheet {
+      font-size: 1.1rem;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .action-sheet-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .action-sheet-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
       width: 100%;
       text-align: left;
-      padding: var(--space-3) var(--space-4);
-      font-size: var(--font-size-sm);
-      color: var(--color-text-primary);
-      text-decoration: none;
+      padding: var(--space-3) var(--space-3);
+      border-radius: var(--radius-md);
       background: none;
       border: none;
+      color: var(--color-text-primary);
+      text-decoration: none;
       cursor: pointer;
       transition: background var(--duration-fast);
       font-family: inherit;
+      min-height: 48px;
     }
-    .dropdown-item:hover { background: var(--color-surface-2); }
-    .dropdown-item.danger { color: var(--color-error); }
-    .dropdown-divider { border: none; border-top: 1px solid var(--color-border); margin: var(--space-1) 0; }
+    .action-sheet-btn:hover,
+    .action-sheet-btn:active {
+      background: var(--color-surface-2);
+    }
+    .sheet-icon {
+      font-size: 1.4rem;
+      width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .sheet-texts {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .sheet-primary {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+    }
+    .sheet-secondary {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+    .action-sheet-btn.danger .sheet-primary {
+      color: var(--color-error);
+    }
+    .action-sheet-divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: var(--space-1) 0;
+    }
 
     /* Loading */
     .loading-state {
@@ -414,7 +546,7 @@ export class LibraryComponent implements OnInit {
   loading = signal(true);
   activeCategory = signal<RoutineCategory | 'all'>('all');
   sortMode = signal<SortMode>('recent');
-  openMenuId = signal<string | null>(null);
+  activeMenuRoutine = signal<Routine | null>(null);
   deletingRoutine = signal<Routine | null>(null);
   searchQuery = '';
 
@@ -476,13 +608,13 @@ export class LibraryComponent implements OnInit {
     return routine.blocks.reduce((acc, b) => acc + b.steps.length * b.repetitions, 0);
   }
 
-  toggleMenu(id: string, e: MouseEvent): void {
+  openRoutineMenu(routine: Routine, e: MouseEvent): void {
     e.stopPropagation();
-    this.openMenuId.set(this.openMenuId() === id ? null : id);
+    this.activeMenuRoutine.set(routine);
   }
 
   closeMenu(): void {
-    this.openMenuId.set(null);
+    this.activeMenuRoutine.set(null);
   }
 
   async duplicate(routine: Routine): Promise<void> {
