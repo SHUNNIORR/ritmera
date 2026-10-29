@@ -675,6 +675,7 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       border-radius: var(--radius-full);
       background: var(--color-accent-muted);
       color: var(--color-accent);
+      border: 1px solid rgba(255, 107, 53, 0.35);
       border: 1px solid color-mix(in srgb, var(--color-accent) 38%, transparent);
       box-shadow: none;
     }
@@ -1157,12 +1158,14 @@ export class LibraryComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.loadRoutines();
-    // Cerrar hojas al hacer clic fuera de ellas
+    // Cerrar hojas al hacer clic fuera de ellas (registrado antes del await
+    // para que no se filtre si el componente se destruye durante la carga).
     const closeMenusOnClick = () => this.closeAllMenus();
     document.addEventListener('click', closeMenusOnClick);
     this.destroyRef.onDestroy(() => document.removeEventListener('click', closeMenusOnClick));
+    await this.loadRoutines();
   }
+
 
   async loadRoutines(): Promise<void> {
     this.loading.set(true);
