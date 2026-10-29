@@ -43,6 +43,15 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
           </a>
         </div>
 
+        <!-- Atajos de creación rápida por tipo -->
+        <div class="quick-creators" aria-label="Crear según plantilla">
+          <span class="quick-label">Creación guiada:</span>
+          <a [routerLink]="['/rutina/nueva']" [queryParams]="{ tipo: 'tabata' }" class="chip chip-action">⚡ Tabata</a>
+          <a [routerLink]="['/rutina/nueva']" [queryParams]="{ tipo: 'hiit' }" class="chip chip-action">🔥 HIIT</a>
+          <a [routerLink]="['/rutina/nueva']" [queryParams]="{ tipo: 'emom' }" class="chip chip-action">⏱️ EMOM</a>
+          <a [routerLink]="['/rutina/nueva']" [queryParams]="{ tipo: 'pomodoro' }" class="chip chip-action">🍅 Pomodoro</a>
+        </div>
+
         <!-- Buscador -->
         <div class="search-wrapper">
           <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -205,6 +214,29 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       display: flex;
       gap: var(--space-3);
       flex-wrap: wrap;
+    }
+
+    .quick-creators {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .quick-label {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      font-weight: var(--font-weight-medium);
+    }
+    .chip-action {
+      background: var(--color-surface-2);
+      border-color: var(--color-border-strong);
+      text-decoration: none;
+    }
+    .chip-action:hover {
+      background: var(--color-surface-3);
+      color: var(--color-text-primary);
+      text-decoration: none;
+      border-color: var(--color-accent);
     }
 
     /* Buscador */
