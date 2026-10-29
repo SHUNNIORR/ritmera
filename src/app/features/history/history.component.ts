@@ -8,10 +8,9 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-history',
-  standalone: true,
-  imports: [CommonModule, RouterLink, DurationPipe, EmptyStateComponent, ConfirmDialogComponent],
-  template: `
+    selector: 'app-history',
+    imports: [CommonModule, RouterLink, DurationPipe, EmptyStateComponent, ConfirmDialogComponent],
+    template: `
     <div class="history-page">
       <header class="history-header">
         <div class="title-row">
@@ -102,7 +101,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
       (confirmed)="clearAllHistory()"
       (cancelled)="showClearAllConfirm.set(false)" />
   `,
-  styles: [`
+    styles: [`
     .history-page {
       max-width: var(--content-max-width);
       margin: 0 auto;
@@ -218,7 +217,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
     .delete-btn:hover {
       color: var(--color-error);
     }
-  `],
+  `]
 })
 export class HistoryComponent implements OnInit {
   private sessionRepo = inject(SessionRepository);

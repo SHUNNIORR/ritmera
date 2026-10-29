@@ -28,10 +28,9 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
 };
 
 @Component({
-  selector: 'app-library',
-  standalone: true,
-  imports: [RouterLink, DurationPipe, EmptyStateComponent, ConfirmDialogComponent],
-  template: `
+    selector: 'app-library',
+    imports: [RouterLink, DurationPipe, EmptyStateComponent, ConfirmDialogComponent],
+    template: `
     <div class="library-page">
       <!-- Encabezado de la biblioteca -->
       <header class="library-header">
@@ -408,7 +407,7 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
         (cancelled)="deletingRoutine.set(null)" />
     }
   `,
-  styles: [`
+    styles: [`
     .library-page {
       max-width: 1180px;
       margin: 0 auto;
@@ -1090,7 +1089,7 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
         animation: none;
       }
     }
-  `],
+  `]
 })
 export class LibraryComponent implements OnInit {
   private routineRepo = inject(RoutineRepository);

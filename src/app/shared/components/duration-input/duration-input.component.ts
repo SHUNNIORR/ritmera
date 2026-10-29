@@ -2,17 +2,16 @@ import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/cor
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-duration-input',
-  standalone: true,
-  imports: [ReactiveFormsModule],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DurationInputComponent),
-      multi: true,
-    },
-  ],
-  template: `
+    selector: 'app-duration-input',
+    imports: [ReactiveFormsModule],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DurationInputComponent),
+            multi: true,
+        },
+    ],
+    template: `
     <div class="duration-input" [attr.aria-label]="label">
       <div class="duration-group">
         <label class="duration-label" [for]="'min-' + uid">
@@ -54,7 +53,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
       }
     </div>
   `,
-  styles: [`
+    styles: [`
     .duration-input { display: flex; flex-direction: column; gap: var(--space-1); }
     .duration-group { display: flex; align-items: center; gap: var(--space-2); }
     .duration-label { display: flex; flex-direction: column; align-items: center; gap: 2px; }
@@ -76,7 +75,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
     .duration-field:focus { outline: none; border-color: var(--color-accent); }
     .duration-unit { font-size: var(--font-size-xs); color: var(--color-text-muted); }
     .duration-sep { font-size: var(--font-size-xl); color: var(--color-text-muted); margin-bottom: 16px; }
-  `],
+  `]
 })
 export class DurationInputComponent implements ControlValueAccessor {
   @Input() label = 'Duración';

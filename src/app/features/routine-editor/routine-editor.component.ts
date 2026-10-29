@@ -47,10 +47,9 @@ interface TemplateOption {
 }
 
 @Component({
-  selector: 'app-routine-editor',
-  standalone: true,
-  imports: [RouterLink, FormsModule, ReactiveFormsModule, DurationInputComponent, ConfirmDialogComponent, DurationPipe],
-  template: `
+    selector: 'app-routine-editor',
+    imports: [RouterLink, FormsModule, ReactiveFormsModule, DurationInputComponent, ConfirmDialogComponent, DurationPipe],
+    template: `
     <div class="editor-page">
       <header class="editor-header">
         <button class="btn btn-ghost btn-icon" (click)="onCancel()" aria-label="Volver">
@@ -486,7 +485,7 @@ interface TemplateOption {
         (cancelled)="showCancelDialog.set(false)" />
     }
   `,
-  styles: [`
+    styles: [`
     .editor-page { max-width: var(--content-max-width); margin: 0 auto; padding: var(--space-4); }
 
     .editor-header {
@@ -649,7 +648,7 @@ interface TemplateOption {
       display: flex; flex-direction: column; gap: var(--space-2);
     }
     .extra-title { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }
-  `],
+  `]
 })
 export class RoutineEditorComponent implements OnInit {
   @Input() id?: string;

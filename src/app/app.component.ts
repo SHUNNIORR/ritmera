@@ -16,10 +16,9 @@ import { ThemePreference } from './core/timer-engine/timer-engine.types';
 import { LibrarySearchService } from './core/ui/library-search.service';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
-  template: `
+    selector: 'app-root',
+    imports: [RouterOutlet, RouterLink, RouterLinkActive],
+    template: `
     <div class="app-shell">
       <!-- Encabezado -->
       <header class="app-header" role="banner">
@@ -120,7 +119,7 @@ import { LibrarySearchService } from './core/ui/library-search.service';
       </nav>
     </div>
   `,
-  styles: [`
+    styles: [`
     .app-shell {
       display: flex;
       flex-direction: column;
@@ -447,7 +446,7 @@ import { LibrarySearchService } from './core/ui/library-search.service';
         transition: none;
       }
     }
-  `],
+  `]
 })
 export class AppComponent implements OnInit {
   private settingsRepo = inject(SettingsRepository);

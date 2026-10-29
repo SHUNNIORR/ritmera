@@ -21,10 +21,9 @@ import { DurationPipe } from '../../shared/pipes/duration.pipe';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-timer-runner',
-  standalone: true,
-  imports: [CommonModule, RouterLink, DurationPipe, ConfirmDialogComponent],
-  template: `
+    selector: 'app-timer-runner',
+    imports: [CommonModule, RouterLink, DurationPipe, ConfirmDialogComponent],
+    template: `
     <div class="runner-page" [style.--step-bg]="currentStepColor()">
       <!-- Barra superior / Header del runner -->
       <header class="runner-top-bar">
@@ -179,7 +178,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
       (confirmed)="confirmExit()"
       (cancelled)="showExitConfirm.set(false)" />
   `,
-  styles: [`
+    styles: [`
     .runner-page {
       min-height: calc(100dvh - var(--header-height));
       display: flex;
@@ -413,7 +412,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
       width: 100%;
       max-width: 320px;
     }
-  `],
+  `]
 })
 export class TimerRunnerComponent implements OnInit, OnDestroy {
   @Input() id?: string; // id de rutina o undefined para rápido

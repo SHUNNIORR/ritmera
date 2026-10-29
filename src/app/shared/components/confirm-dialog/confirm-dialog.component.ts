@@ -2,10 +2,9 @@ import { Component, Input, Output, EventEmitter, HostListener } from '@angular/c
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-confirm-dialog',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'app-confirm-dialog',
+    imports: [CommonModule],
+    template: `
     <div class="dialog-overlay" role="dialog" aria-modal="true"
          [attr.aria-labelledby]="'dialog-title-' + uid"
          [attr.aria-describedby]="'dialog-desc-' + uid"
@@ -27,7 +26,7 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .dialog-overlay {
       position: fixed;
       inset: 0;
@@ -73,7 +72,7 @@ import { CommonModule } from '@angular/common';
       gap: var(--space-3);
       justify-content: flex-end;
     }
-  `],
+  `]
 })
 export class ConfirmDialogComponent {
   @Input() title = '¿Estás seguro?';

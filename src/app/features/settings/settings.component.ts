@@ -12,10 +12,9 @@ import { defaultSettings } from '../../core/timer-engine/timer-engine.utils';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-settings',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmDialogComponent],
-  template: `
+    selector: 'app-settings',
+    imports: [CommonModule, FormsModule, ConfirmDialogComponent],
+    template: `
     <div class="settings-page">
       <header class="settings-header">
         <h1 class="settings-title">Ajustes y Configuración</h1>
@@ -188,7 +187,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
       (confirmed)="wipeAllData()"
       (cancelled)="showWipeConfirm = false" />
   `,
-  styles: [`
+    styles: [`
     .settings-page {
       max-width: var(--content-max-width);
       margin: 0 auto;
@@ -331,7 +330,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
       gap: var(--space-3);
       flex-wrap: wrap;
     }
-  `],
+  `]
 })
 export class SettingsComponent implements OnInit {
   private settingsRepo = inject(SettingsRepository);
