@@ -513,13 +513,34 @@ export class TimerRunnerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+    this.audioService.syncSchedule(null);
+    this.updateMediaSession(null);
     this.wakeLock.release();
+  }
+
+  /** Controles en la pantalla de bloqueo (iOS/Android) mientras suena el audio de fondo. */
+  private updateMediaSession(s: TimerSession | null): void {
+    if (!('mediaSession' in navigator)) return;
+    const ms = navigator.mediaSession;
+    if (!s || s.state === 'completed' || s.state === 'cancelled') {
+      ms.metadata = null;
+      ms.setActionHandler('play', null);
+      ms.setActionHandler('pause', null);
+      return;
+    }
+    const step = s.expandedSteps[s.currentStepGlobalIndex]?.step;
+    ms.metadata = new MediaMetadata({ title: step?.name ?? s.routineName, artist: 'Ritmera', album: s.routineName });
+    ms.playbackState = s.state === 'running' ? 'playing' : 'paused';
+    ms.setActionHandler('play', () => { this.audioService.initContext(); this.timerEngine.resume(); });
+    ms.setActionHandler('pause', () => this.timerEngine.pause());
   }
 
   private subscribeEngine(): void {
     this.subs.add(
       this.timerEngine.session$.subscribe(s => {
         this.session.set(s);
+        this.audioService.syncSchedule(s);
+        this.updateMediaSession(s);
         if (s) {
           if (s.state === 'running' || s.state === 'paused') {
             this.sessionRepo.saveActiveSession(s);
