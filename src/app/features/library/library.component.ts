@@ -1023,6 +1023,15 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
 
       .routine-card:hover { transform: translateY(-1px); }
 
+      /* escritorio: las opciones van en la esquina superior derecha, fuera de la fila de Iniciar */
+      .routine-menu-btn {
+        position: absolute;
+        top: var(--space-2);
+        right: var(--space-2);
+        width: 36px;
+        height: 36px;
+      }
+
       .routine-info {
         padding: var(--space-4) 0 var(--space-4) var(--space-4);
       }
