@@ -177,15 +177,6 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
                     @if (routine.isFavorite) {
                       <span class="routine-fav" aria-label="Favorita">★</span>
                     }
-                    <button class="btn btn-ghost btn-icon routine-menu-btn"
-                            [attr.aria-label]="'Opciones para ' + routine.name"
-                            (click)="openRoutineMenu(routine, $event)">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <circle cx="12" cy="5" r="1.5"/>
-                        <circle cx="12" cy="12" r="1.5"/>
-                        <circle cx="12" cy="19" r="1.5"/>
-                      </svg>
-                    </button>
                   </div>
                   <h3 class="routine-name">{{ routine.name }}</h3>
                   @if (routine.description) {
@@ -219,6 +210,15 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
                     </svg>
                     <span class="routine-start-label">Iniciar</span>
                   </a>
+                    <button class="btn btn-ghost btn-icon routine-menu-btn"
+                            [attr.aria-label]="'Opciones para ' + routine.name"
+                            (click)="openRoutineMenu(routine, $event)">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <circle cx="12" cy="5" r="1.5"/>
+                        <circle cx="12" cy="12" r="1.5"/>
+                        <circle cx="12" cy="19" r="1.5"/>
+                      </svg>
+                    </button>
                 </div>
               </li>
             }
@@ -591,12 +591,13 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       border-color: var(--color-border-strong);
     }
 
+    /* la barra cubre el borde izquierdo de la tarjeta de punta a punta */
     .routine-stripe {
       width: 4px;
       flex-shrink: 0;
+      margin: -1px 0 -1px -1px;
       background: var(--routine-color, var(--color-accent));
-      border-top-left-radius: var(--radius-lg);
-      border-bottom-left-radius: var(--radius-lg);
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
     }
 
     .routine-info {
@@ -611,9 +612,8 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       margin-bottom: 2px;
     }
     .routine-menu-btn {
-      margin-left: auto;
-      width: 34px;
-      height: 34px;
+      width: 40px;
+      height: 40px;
       flex: none;
       color: var(--color-text-muted);
     }
@@ -660,10 +660,11 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
 
     .routine-actions {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
-      padding: var(--space-2) var(--space-3) var(--space-2) 0;
+      justify-content: flex-end;
+      gap: var(--space-1);
+      padding: var(--space-3) var(--space-3) var(--space-3) 0;
     }
 
     .routine-start-btn {
@@ -1043,10 +1044,7 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       .routine-meta { gap: var(--space-2); font-size: var(--font-size-sm); }
 
       .routine-actions {
-        flex-direction: row;
-        align-items: center;
-        gap: var(--space-1);
-        padding: var(--space-4) var(--space-2) var(--space-4) 0;
+        padding: var(--space-4) var(--space-3) var(--space-4) 0;
       }
       .routine-start-btn {
         width: auto;
