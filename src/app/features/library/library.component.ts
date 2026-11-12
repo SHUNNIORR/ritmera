@@ -169,55 +169,52 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
           <ul class="routine-list" role="list">
             @for (routine of filteredRoutines(); track routine.id) {
               <li class="routine-card" [style.--routine-color]="routine.color">
-                <div class="routine-info">
-                  <div class="routine-top">
-                    <span class="routine-category">{{ categoryLabel(routine.category) }}</span>
-                    @if (routine.isFavorite) {
-                      <span class="routine-fav" aria-label="Favorita">★</span>
-                    }
-                    <button class="btn btn-ghost btn-icon routine-menu-btn"
-                            [attr.aria-label]="'Opciones para ' + routine.name"
-                            (click)="openRoutineMenu(routine, $event)">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <circle cx="12" cy="5" r="1.5"/>
-                        <circle cx="12" cy="12" r="1.5"/>
-                        <circle cx="12" cy="19" r="1.5"/>
-                      </svg>
-                    </button>
-                  </div>
+                <div class="routine-top">
+                  <span class="routine-category">{{ categoryLabel(routine.category) }}</span>
+                  @if (routine.isFavorite) {
+                    <span class="routine-fav" aria-label="Favorita">★</span>
+                  }
+                </div>
+                <button class="btn btn-ghost btn-icon routine-menu-btn"
+                        [attr.aria-label]="'Opciones para ' + routine.name"
+                        (click)="openRoutineMenu(routine, $event)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <circle cx="12" cy="5" r="1.5"/>
+                    <circle cx="12" cy="12" r="1.5"/>
+                    <circle cx="12" cy="19" r="1.5"/>
+                  </svg>
+                </button>
+                <div class="routine-body">
                   <h3 class="routine-name">{{ routine.name }}</h3>
                   @if (routine.description) {
                     <p class="routine-desc">{{ routine.description }}</p>
                   }
-                  <div class="routine-meta">
-                    <span class="routine-meta-item">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                           stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
-                      </svg>
-                      {{ calcDuration(routine) | duration }}
-                    </span>
-                    <span class="routine-meta-sep" aria-hidden="true">·</span>
-                    <span class="routine-meta-item">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="m12 2 9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/>
-                      </svg>
-                      {{ countSteps(routine) }} etapas
-                    </span>
-                  </div>
                 </div>
-
-                <div class="routine-actions">
-                  <a [routerLink]="['/temporizador', routine.id]"
-                     class="btn btn-primary routine-start-btn"
-                     [attr.aria-label]="'Iniciar ' + routine.name">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d="M8 5v14l11-7z"/>
+                <div class="routine-meta">
+                  <span class="routine-meta-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
                     </svg>
-                    <span class="routine-start-label">Iniciar</span>
-                  </a>
+                    {{ calcDuration(routine) | duration }}
+                  </span>
+                  <span class="routine-meta-sep" aria-hidden="true">·</span>
+                  <span class="routine-meta-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="m12 2 9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/>
+                    </svg>
+                    {{ countSteps(routine) }} etapas
+                  </span>
                 </div>
+                <a [routerLink]="['/temporizador', routine.id]"
+                   class="btn btn-primary routine-start-btn"
+                   [attr.aria-label]="'Iniciar ' + routine.name">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                  <span class="routine-start-label">Iniciar</span>
+                </a>
               </li>
             }
           </ul>
@@ -570,10 +567,12 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
     }
 
     .routine-card {
-      display: flex;
-      gap: var(--space-3);
-      align-items: stretch;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      column-gap: var(--space-3);
       min-width: 0;
+      padding: var(--space-3) var(--space-4) var(--space-4) var(--space-4);
       background: var(--color-bg-card);
       border: 1px solid var(--color-border);
       /* el borde izquierdo de color sigue las esquinas redondeadas de la tarjeta */
@@ -594,23 +593,24 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
 
 
 
-    .routine-info {
-      flex: 1;
-      min-width: 0;
-      padding: var(--space-3) 0 var(--space-3) var(--space-4);
-    }
+    /* fila superior: categoría a la izquierda, opciones a la derecha */
     .routine-top {
+      grid-column: 1;
+      grid-row: 1;
       display: flex;
       align-items: center;
       gap: var(--space-2);
-      margin-bottom: 2px;
+      min-width: 0;
     }
     .routine-menu-btn {
-      margin-left: auto;
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+      align-self: start;
       width: 32px;
       height: 32px;
       min-height: 32px;
-      flex: none;
+      margin: -4px -4px 0 0;
       color: var(--color-text-muted);
     }
     .routine-category {
@@ -639,7 +639,17 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       text-overflow: ellipsis;
       margin-bottom: var(--space-2);
     }
+    .routine-body {
+      grid-column: 1;
+      grid-row: 2;
+      min-width: 0;
+      align-self: start;
+      margin-top: var(--space-1);
+    }
     .routine-meta {
+      grid-column: 1;
+      grid-row: 3;
+      align-self: center;
       display: flex;
       align-items: center;
       gap: var(--space-2);
@@ -654,16 +664,11 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
     }
     .routine-meta-sep { opacity: 0.5; }
 
-    .routine-actions {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-end;
-      gap: var(--space-1);
-      padding: var(--space-3) var(--space-3) var(--space-3) 0;
-    }
-
     .routine-start-btn {
+      grid-column: 2;
+      grid-row: 3;
+      justify-self: end;
+      align-self: center;
       width: 48px;
       height: 48px;
       min-height: 48px;
@@ -1024,9 +1029,6 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
 
       .routine-card:hover { transform: translateY(-1px); }
 
-      .routine-info {
-        padding: var(--space-4) 0 var(--space-4) var(--space-4);
-      }
       .routine-name { font-size: var(--font-size-lg); }
       .routine-desc {
         display: -webkit-box;
