@@ -183,11 +183,15 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
       min-height: calc(100dvh - var(--header-height));
       display: flex;
       flex-direction: column;
-      background: radial-gradient(circle at top, var(--step-bg, var(--color-bg-primary)) 0%, var(--color-bg-primary) 70%);
+      background: radial-gradient(ellipse at top, var(--step-bg, var(--color-bg-primary)) 0%, var(--color-bg-primary) 70%);
       padding: var(--space-4);
-      max-width: 600px;
-      margin: 0 auto;
       transition: background 0.4s ease;
+    }
+    /* El fondo ocupa todo el ancho; el contenido se mantiene en una columna centrada */
+    .runner-top-bar, .runner-main, .runner-summary {
+      width: 100%;
+      max-width: 600px;
+      margin-inline: auto;
     }
 
     .runner-top-bar {
@@ -355,6 +359,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
 
     /* Resumen post-entrenamiento */
     .runner-summary {
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -411,6 +416,21 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
       gap: var(--space-3);
       width: 100%;
       max-width: 320px;
+    }
+
+    /* Escritorio: más aire y reloj proporcional al alto de la ventana */
+    @media (min-width: 1024px) {
+      .runner-page { padding: var(--space-6) var(--space-8); }
+      .runner-top-bar, .runner-main { max-width: 760px; }
+      .routine-title { font-size: var(--font-size-xl); max-width: 480px; }
+      .runner-main { gap: var(--space-4); padding-bottom: var(--space-8); }
+      .current-step-name { font-size: var(--font-size-3xl); }
+      .clock-display { font-size: min(13rem, 11vw, 26vh); }
+      .progress-bar-container { height: 12px; margin: var(--space-3) 0; }
+      .next-step-preview { font-size: var(--font-size-md); }
+      .overall-progress { font-size: var(--font-size-sm); }
+      .control-btn { width: 64px; height: 64px; }
+      .play-pause-btn { width: 96px; height: 96px; }
     }
   `]
 })
@@ -488,6 +508,7 @@ export class TimerRunnerComponent implements OnInit, OnDestroy {
     this.audioService.setEnabled(appSettings.soundEnabled);
     this.speechService.setEnabled(appSettings.voiceEnabled);
     this.timerEngine.setWarningBeforeEndMs(appSettings.warningBeforeEndSec * 1000);
+    this.audioService.setWarningBeforeEndSec(appSettings.warningBeforeEndSec);
 
     // Audio context initialization on user navigation
     this.audioService.initContext();

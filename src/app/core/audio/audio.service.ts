@@ -20,16 +20,24 @@ export interface ScheduledCue {
   cue: AudioCue;
 }
 
-/** Tonos futuros de una sesión en marcha: inicio de cada etapa siguiente y fin de sesión. */
-export function buildCueTimeline(session: TimerSession, now: number): ScheduledCue[] {
+/**
+ * Tonos futuros de una sesión en marcha: cuenta atrás (un pitido por segundo en los
+ * últimos `warningSec` segundos de cada etapa), inicio de cada etapa siguiente y fin de sesión.
+ */
+export function buildCueTimeline(session: TimerSession, now: number, warningSec = 0): ScheduledCue[] {
   if (session.state !== 'running' || !session.stepDeadlineAt) return [];
   const cues: ScheduledCue[] = [];
-  let t = session.stepDeadlineAt;
-  for (let i = session.currentStepGlobalIndex + 1; i < session.expandedSteps.length; i++) {
-    cues.push({ atMs: t, cue: 'start' });
-    t += session.expandedSteps[i].step.durationSeconds * 1000;
+  const steps = session.expandedSteps;
+  let deadline = session.stepDeadlineAt;
+  for (let i = session.currentStepGlobalIndex; i < steps.length; i++) {
+    // k < duración: en etapas cortas no se solapa con el pitido de inicio de la etapa.
+    for (let k = Math.min(warningSec, steps[i].step.durationSeconds - 1); k >= 1; k--) {
+      cues.push({ atMs: deadline - k * 1000, cue: 'warning' });
+    }
+    const next = steps[i + 1];
+    cues.push({ atMs: deadline, cue: next ? 'start' : 'complete' });
+    if (next) deadline += next.step.durationSeconds * 1000;
   }
-  cues.push({ atMs: t, cue: 'complete' });
   return cues.filter(c => c.atMs > now);
 }
 
@@ -53,6 +61,7 @@ interface ScheduledNode {
 export class AudioService {
   private ctx: AudioContext | null = null;
   private enabled = true;
+  private warningSec = 0;
   private scheduled: ScheduledNode[] = [];
   private lastSession: TimerSession | null = null;
   private keepAlive: HTMLAudioElement | null = null;
@@ -74,6 +83,12 @@ export class AudioService {
 
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
+    if (this.lastSession) this.syncSchedule(this.lastSession);
+  }
+
+  /** Segundos finales de cada etapa con pitido de cuenta atrás (0 = sin aviso). */
+  setWarningBeforeEndSec(sec: number): void {
+    this.warningSec = Math.max(0, Math.floor(sec));
     if (this.lastSession) this.syncSchedule(this.lastSession);
   }
 
@@ -112,7 +127,7 @@ export class AudioService {
 
     if (!session || !this.enabled) return;
     const now = Date.now();
-    for (const { atMs, cue } of buildCueTimeline(session, now)) {
+    for (const { atMs, cue } of buildCueTimeline(session, now, this.warningSec)) {
       const at = ctxNow + (atMs - now) / 1000;
       for (const osc of this.createTone(cue, at)) this.scheduled.push({ osc, at, cue });
     }
@@ -189,7 +204,7 @@ export class AudioService {
       case 'end':
         return [n(440, 0.3, 0, 'sine', 0.4)];
       case 'warning':
-        return [n(660, 0.1, 0, 'square', 0.2)];
+        return [n(880, 0.12, 0)]; // pitido corto de cuenta atrás
       case 'transition':
         return [n(587, 0.2, 0, 'triangle', 0.35)];
     }
