@@ -169,8 +169,6 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
           <ul class="routine-list" role="list">
             @for (routine of filteredRoutines(); track routine.id) {
               <li class="routine-card" [style.--routine-color]="routine.color">
-                <div class="routine-stripe" aria-hidden="true"></div>
-
                 <div class="routine-info">
                   <div class="routine-top">
                     <span class="routine-category">{{ categoryLabel(routine.category) }}</span>
@@ -578,6 +576,8 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       min-width: 0;
       background: var(--color-bg-card);
       border: 1px solid var(--color-border);
+      /* el borde izquierdo de color sigue las esquinas redondeadas de la tarjeta */
+      border-left: 4px solid var(--routine-color, var(--color-accent));
       border-radius: var(--radius-lg);
       position: relative;
       box-shadow: var(--shadow-sm);
@@ -589,21 +589,15 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
     .routine-card:hover {
       box-shadow: var(--shadow-md);
       border-color: var(--color-border-strong);
+      border-left-color: var(--routine-color, var(--color-accent));
     }
 
-    /* la barra cubre el borde izquierdo de la tarjeta de punta a punta */
-    .routine-stripe {
-      width: 4px;
-      flex-shrink: 0;
-      margin: -1px 0 -1px -1px;
-      background: var(--routine-color, var(--color-accent));
-      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    }
+
 
     .routine-info {
       flex: 1;
       min-width: 0;
-      padding: var(--space-3) 0 var(--space-3) var(--space-1);
+      padding: var(--space-3) 0 var(--space-3) var(--space-4);
     }
     .routine-top {
       display: flex;
@@ -1030,7 +1024,7 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       .routine-card:hover { transform: translateY(-1px); }
 
       .routine-info {
-        padding: var(--space-4) 0 var(--space-4) var(--space-1);
+        padding: var(--space-4) 0 var(--space-4) var(--space-4);
       }
       .routine-name { font-size: var(--font-size-lg); }
       .routine-desc {
