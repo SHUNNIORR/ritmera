@@ -2,7 +2,7 @@
 
 > Inspirado en temporizadores de entrenamiento físico (como Timer Plus), con identidad propia, arquitectura local-first, motor de reloj desacoplado basado en marcas de tiempo y estándares web modernos.
 >
-> **Versión web:** [ritmera-landing.jperezpenaranda.workers.dev](https://ritmera-landing.jperezpenaranda.workers.dev) (landing) · [43b091d9-ritmera.jperezpenaranda.workers.dev/biblioteca](https://43b091d9-ritmera.jperezpenaranda.workers.dev/biblioteca) (app)
+> **Versión web:** [ritmera-landing.jperezpenaranda.workers.dev](https://ritmera-landing.jperezpenaranda.workers.dev) (landing) · [ritmera.jperezpenaranda.workers.dev/biblioteca](https://ritmera.jperezpenaranda.workers.dev/biblioteca) (app)
 
 ---
 
