@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <title>Ritmera — Timer Icon</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#302016"/>
+      <stop offset="100%" stop-color="#120C09"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="48%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#633719" stop-opacity=".72"/>
+      <stop offset="100%" stop-color="#21130D" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F4AC65"/>
+      <stop offset="100%" stop-color="#DE762F"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="192" height="192" rx="49"
+        fill="url(#bg)" stroke="#58473C" stroke-width="1.5"/>
+  <rect x="4" y="4" width="192" height="192" rx="49"
+        fill="url(#glow)"/>
+
+  <path d="M 96 42 A 58 58 0 1 1 44 85"
+        fill="none" stroke="url(#orange)"
+        stroke-width="11.5" stroke-linecap="round"/>
+
+  <path d="M84 75 L84 125 L128 100 Z"
+        fill="#F8EBD8" stroke="#F8EBD8" stroke-width="6" stroke-linejoin="round"/>
+</svg>

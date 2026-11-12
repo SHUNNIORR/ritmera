@@ -1,0 +1,10 @@
+// Landing de Ritmera: Worker de solo archivos estáticos, aparte de la app.
+// Desplegar desde esta carpeta: cd landing && npx wrangler deploy
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "ritmera-landing",
+  "compatibility_date": "2026-11-10",
+  "assets": {
+    "directory": "."
+  }
+}

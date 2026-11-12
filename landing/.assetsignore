@@ -1,0 +1,9 @@
+# Archivos de trabajo que no se publican
+.assetsignore
+wrangler.jsonc
+.wrangler
+.taste-skill
+shots
+capture.mjs
+serve.mjs
+.gitignore
