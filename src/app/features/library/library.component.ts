@@ -175,6 +175,15 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
                     @if (routine.isFavorite) {
                       <span class="routine-fav" aria-label="Favorita">★</span>
                     }
+                    <button class="btn btn-ghost btn-icon routine-menu-btn"
+                            [attr.aria-label]="'Opciones para ' + routine.name"
+                            (click)="openRoutineMenu(routine, $event)">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <circle cx="12" cy="5" r="1.5"/>
+                        <circle cx="12" cy="12" r="1.5"/>
+                        <circle cx="12" cy="19" r="1.5"/>
+                      </svg>
+                    </button>
                   </div>
                   <h3 class="routine-name">{{ routine.name }}</h3>
                   @if (routine.description) {
@@ -208,15 +217,6 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
                     </svg>
                     <span class="routine-start-label">Iniciar</span>
                   </a>
-                    <button class="btn btn-ghost btn-icon routine-menu-btn"
-                            [attr.aria-label]="'Opciones para ' + routine.name"
-                            (click)="openRoutineMenu(routine, $event)">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <circle cx="12" cy="5" r="1.5"/>
-                        <circle cx="12" cy="12" r="1.5"/>
-                        <circle cx="12" cy="19" r="1.5"/>
-                      </svg>
-                    </button>
                 </div>
               </li>
             }
@@ -606,8 +606,10 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       margin-bottom: 2px;
     }
     .routine-menu-btn {
-      width: 40px;
-      height: 40px;
+      margin-left: auto;
+      width: 32px;
+      height: 32px;
+      min-height: 32px;
       flex: none;
       color: var(--color-text-muted);
     }
@@ -667,14 +669,13 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       min-height: 48px;
       padding: 0;
       border-radius: var(--radius-full);
-      background: var(--color-accent-muted);
-      color: var(--color-accent);
-      border: 1px solid rgba(255, 107, 53, 0.35);
-      border: 1px solid color-mix(in srgb, var(--color-accent) 38%, transparent);
+      background: var(--color-accent);
+      color: var(--color-text-on-accent);
+      border: 1px solid transparent;
       box-shadow: none;
     }
     .routine-start-btn:hover {
-      background: var(--color-accent);
+      background: var(--color-accent-hover);
       color: var(--color-text-on-accent);
     }
     .routine-start-label { display: none; }
@@ -1023,15 +1024,6 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
 
       .routine-card:hover { transform: translateY(-1px); }
 
-      /* escritorio: las opciones van en la esquina superior derecha, fuera de la fila de Iniciar */
-      .routine-menu-btn {
-        position: absolute;
-        top: var(--space-2);
-        right: var(--space-2);
-        width: 36px;
-        height: 36px;
-      }
-
       .routine-info {
         padding: var(--space-4) 0 var(--space-4) var(--space-4);
       }
@@ -1046,25 +1038,6 @@ const CATEGORY_LABELS: Record<RoutineCategory | 'all', string> = {
       }
       .routine-meta { gap: var(--space-2); font-size: var(--font-size-sm); }
 
-      .routine-actions {
-        padding: var(--space-4) var(--space-3) var(--space-4) 0;
-      }
-      .routine-start-btn {
-        width: auto;
-        height: auto;
-        min-height: 42px;
-        padding: var(--space-2) var(--space-4);
-        border-radius: var(--radius-md);
-        background: var(--color-accent);
-        color: var(--color-text-on-accent);
-        border-color: transparent;
-        box-shadow: none;
-      }
-      .routine-start-btn:hover {
-        background: var(--color-accent-hover);
-        color: var(--color-text-on-accent);
-      }
-      .routine-start-label { display: inline; }
 
       .fab { display: none; }
       .library-content { padding-bottom: 0; }
