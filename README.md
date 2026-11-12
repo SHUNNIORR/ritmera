@@ -1,17 +1,19 @@
 # Ritmera · Progressive Web App (PWA) de Temporizadores de Intervalos
 
-> **Proyecto Académico** inspirado en conceptos de temporizadores de entrenamiento físico (como Timer Plus), implementado con identidad propia, arquitectura local-first, motor de reloj desacoplado basado en marcas de tiempo y cumplimiento de estándares web modernos.
+> Inspirado en temporizadores de entrenamiento físico (como Timer Plus), con identidad propia, arquitectura local-first, motor de reloj desacoplado basado en marcas de tiempo y estándares web modernos.
+>
+> **Versión web:** [ritmera-landing.jperezpenaranda.workers.dev](https://ritmera-landing.jperezpenaranda.workers.dev) (landing) · [43b091d9-ritmera.jperezpenaranda.workers.dev/biblioteca](https://43b091d9-ritmera.jperezpenaranda.workers.dev/biblioteca) (app)
 
 ---
 
-## 1. Descripción y alcance académico
+## 1. Descripción
 
 **Ritmera** es una Progressive Web App (PWA) diseñada para crear, estructurar, personalizar y ejecutar rutinas de intervalos (HIIT, Tabata, EMOM, descansos de fuerza, estiramientos o bloques de concentración tipo Pomodoro).
 
-El proyecto tiene propósitos estrictamente académicos y de investigación en ingeniería de software frontend:
-- Demostrar el diseño y la fiabilidad de un **motor de temporización desacoplado** capaz de resistir ralentizaciones y suspensiones de pestañas o dispositivos sin derivas de tiempo acumulativas.
-- Implementar una arquitectura **Local-First** robusta mediante IndexedDB (encapsulada tras repositorios asíncronos), garantizando privacidad absoluta y autonomía offline.
-- Ofrecer una experiencia de usuario accesible, responsive (mobile-first) y de alto rendimiento sin sobrecargar la aplicación con librerías visuales pesadas.
+Sus objetivos principales son:
+- Un **motor de temporización desacoplado** que resiste ralentizaciones y suspensiones de pestañas o dispositivos sin derivas de tiempo acumulativas.
+- Una arquitectura **Local-First** mediante IndexedDB (encapsulada tras repositorios asíncronos), con privacidad total y funcionamiento offline.
+- Una experiencia accesible, responsive (mobile-first) y ligera, sin librerías visuales pesadas.
 
 ---
 
@@ -42,8 +44,11 @@ El proyecto tiene propósitos estrictamente académicos y de investigación en i
   - Persistencia de sesión activa: si el usuario recarga la página por accidente, la sesión se restaura en el punto exacto.
 
 - **Audio, voz y pantalla activa:**
-  - Síntesis de sonido local con **Web Audio API** (sin necesidad de descargar archivos de audio externos, funciona 100% offline).
-  - Avisos previos antes de finalizar etapa (beep de aviso).
+  - Síntesis de sonido local con **Web Audio API** (sin archivos de audio externos, funciona offline).
+  - Cuenta atrás con un pitido por segundo en los últimos segundos de cada etapa (configurable en Ajustes, de 0 a 10 s).
+  - Alarma distinta al cambiar de etapa y al terminar la rutina.
+  - Los sonidos se programan por adelantado en el reloj de audio, así que suenan aunque la pantalla esté bloqueada en iPhone (PWA instalada) y Android.
+  - Controles de reproducir y pausar en la pantalla de bloqueo (Media Session API).
   - Anuncios opcionales con **SpeechSynthesis API** en español con detección de compatibilidad y degradación elegante.
   - **Screen Wake Lock API** para mantener la pantalla activa durante el entrenamiento, con liberación automática al terminar.
 
@@ -55,7 +60,7 @@ El proyecto tiene propósitos estrictamente académicos y de investigación en i
 
 - **Ajustes y Copias de Seguridad:**
   - Tema: *Sistema, Claro y Oscuro* mediante CSS tokens y variables.
-  - Preferencias de sonido, voz, vibración y avisos.
+  - Preferencias de sonido, voz y avisos.
   - Exportación de rutinas e historial en un archivo `JSON` versionado (`schemaVersion: 1`).
   - Importación segura de archivos `JSON` con validación de esquema, límite de 10 MB y selección de estrategia ante duplicados: *Omitir, Sobrescribir o Importar como copia*.
   - Restablecimiento de ajustes por defecto y eliminación completa de datos locales.
@@ -66,7 +71,7 @@ El proyecto tiene propósitos estrictamente académicos y de investigación en i
 
 | Tecnología | Elección | Justificación |
 |---|---|---|
-| **Framework** | Angular 18 (Standalone Components) | Arquitectura moderna sin NgModules, Signals reactivos para estado fino y división de paquetes (lazy loading) por ruta. |
+| **Framework** | Angular 20 (Standalone Components) | Arquitectura moderna sin NgModules, Signals reactivos para estado fino y división de paquetes (lazy loading) por ruta. |
 | **Lenguaje** | TypeScript con `strict: true` | Garantía de tipado estricto en modelos de dominio, validaciones y contratos entre capas. |
 | **Persistencia** | IndexedDB mediante Dexie.js (v4) | Persistencia local-first estructurada, asíncrona y con versionado de esquema, encapsulada tras el patrón Repositorio. |
 | **Estilos** | CSS Moderno con Custom Properties | Tokens de diseño para temas claro/oscuro, media queries para móvil/escritorio y respeto a `prefers-reduced-motion` y `safe-area-inset-*`. |
@@ -80,7 +85,7 @@ El proyecto tiene propósitos estrictamente académicos y de investigación en i
 
 ## 4. Requisitos previos
 
-- **Node.js:** Versión 18.x o 20.x (probado en Node v20.18.1).
+- **Node.js:** Versión 20.19 o superior (Angular CLI lo requiere; el proyecto fija 20.19.0 en `.node-version`).
 - **npm:** Versión 9.x o 10.x.
 - Navegador web moderno con soporte para ES2022 e IndexedDB (Chrome, Edge, Safari, Firefox).
 
@@ -188,8 +193,9 @@ Los artefactos compilados se generan en `dist/ritmera/browser`, incluyendo:
 
 > [!WARNING]
 > **Políticas de segundo plano en iOS (Safari):**  
-> En dispositivos iOS, cuando la pantalla se bloquea o el usuario cambia de app, WebKit suspende la ejecución de JavaScript de forma agresiva.
-> **Comportamiento en Ritmera:** Ritmera no confía en un `setInterval` continuo. Al reactivar la aplicación (`pageshow` o `visibilitychange`), el motor de temporización compara la marca de tiempo actual (`Date.now()`) contra `stepDeadlineAt`, deduce cuántas etapas se vencieron durante la suspensión y restaura la pantalla en la etapa y segundo exactos. No obstante, las alertas sonoras en segundo plano profundo con pantalla apagada en iOS requieren aplicaciones nativas con capacidades de audio background específicas.
+> Con la pantalla bloqueada o en otra app, WebKit suspende el JavaScript de la página. Por eso los pitidos y alarmas se programan por adelantado en el motor de audio, y la app mantiene una sesión de audio activa mientras corre el temporizador (modo `playback` de iOS 16.4 o superior).
+> **Limitaciones:** la app suena en segundo plano, pero la voz (SpeechSynthesis) solo funciona con la app en pantalla. Algunas versiones de iOS pueden cortar el audio de fondo; si pasa, la alternativa fiable es empaquetar la app de forma nativa.
+> **Comportamiento en Ritmera:** el motor no depende de un `setInterval` continuo. Al reactivar la aplicación (`pageshow` o `visibilitychange`), compara `Date.now()` contra `stepDeadlineAt`, deduce cuántas etapas se vencieron y restaura la etapa y el segundo exactos.
 
 > [!NOTE]
 > **Screen Wake Lock API:**  
