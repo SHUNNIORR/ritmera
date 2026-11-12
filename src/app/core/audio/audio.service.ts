@@ -33,6 +33,15 @@ export function buildCueTimeline(session: TimerSession, now: number): ScheduledC
   return cues.filter(c => c.atMs > now);
 }
 
+interface Note {
+  frequency: number;
+  duration: number;
+  type: OscillatorType;
+  gain: number;
+  /** silencio tras la nota (s) */
+  gapAfter: number;
+}
+
 interface ScheduledNode {
   osc: OscillatorNode;
   /** tiempo en el reloj del AudioContext (s) */
@@ -105,33 +114,39 @@ export class AudioService {
     const now = Date.now();
     for (const { atMs, cue } of buildCueTimeline(session, now)) {
       const at = ctxNow + (atMs - now) / 1000;
-      const osc = this.createTone(cue, at);
-      if (osc) this.scheduled.push({ osc, at, cue });
+      for (const osc of this.createTone(cue, at)) this.scheduled.push({ osc, at, cue });
     }
   }
 
-  private createTone(cue: AudioCue, at: number): OscillatorNode | null {
-    if (!this.ctx) return null;
-    const { frequency, duration, type, gain } = this.cueParams(cue);
+  /** Programa todas las notas de un aviso; devuelve sus osciladores para poder cancelarlos. */
+  private createTone(cue: AudioCue, at: number): OscillatorNode[] {
+    if (!this.ctx) return [];
+    const nodes: OscillatorNode[] = [];
     try {
-      const osc = this.ctx.createOscillator();
-      const gainNode = this.ctx.createGain();
+      let t = at;
+      for (const { frequency, duration, type, gain, gapAfter } of this.cuePattern(cue)) {
+        const osc = this.ctx.createOscillator();
+        const gainNode = this.ctx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(this.ctx.destination);
 
-      osc.connect(gainNode);
-      gainNode.connect(this.ctx.destination);
+        osc.type = type;
+        osc.frequency.setValueAtTime(frequency, t);
+        // Envolvente sostenida (ataque y caída cortos) para que suene como alarma, no como "plink".
+        gainNode.gain.setValueAtTime(0, t);
+        gainNode.gain.linearRampToValueAtTime(gain, t + 0.005);
+        gainNode.gain.setValueAtTime(gain, t + duration - 0.02);
+        gainNode.gain.linearRampToValueAtTime(0, t + duration);
 
-      osc.type = type;
-      osc.frequency.setValueAtTime(frequency, at);
-      gainNode.gain.setValueAtTime(gain, at);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, at + duration);
-
-      osc.start(at);
-      osc.stop(at + duration);
-      return osc;
+        osc.start(t);
+        osc.stop(t + duration);
+        nodes.push(osc);
+        t += duration + gapAfter;
+      }
     } catch (err) {
       console.warn('[AudioService] Error reproduciendo tono:', err);
-      return null;
     }
+    return nodes;
   }
 
   private startKeepAlive(): void {
@@ -159,23 +174,24 @@ export class AudioService {
     this.keepAlive?.pause();
   }
 
-  private cueParams(cue: AudioCue): {
-    frequency: number;
-    duration: number;
-    type: OscillatorType;
-    gain: number;
-  } {
+  private cuePattern(cue: AudioCue): Note[] {
+    const n = (frequency: number, duration: number, gapAfter = 0.05, type: OscillatorType = 'square', gain = 0.3): Note =>
+      ({ frequency, duration, type, gain, gapAfter });
     switch (cue) {
       case 'start':
-        return { frequency: 880, duration: 0.15, type: 'sine', gain: 0.4 };
+        // Doble tono agudo-grave ×2, tipo alarma (~0,8 s)
+        return [n(1318, 0.16), n(988, 0.16), n(1318, 0.16), n(988, 0.16, 0)];
+      case 'complete': {
+        // Arpegio ascendente + tono largo, repetido dos veces (~2,4 s)
+        const run = [n(784, 0.12), n(988, 0.12), n(1175, 0.12), n(1568, 0.45, 0.2)];
+        return [...run, ...run];
+      }
       case 'end':
-        return { frequency: 440, duration: 0.3, type: 'sine', gain: 0.4 };
+        return [n(440, 0.3, 0, 'sine', 0.4)];
       case 'warning':
-        return { frequency: 660, duration: 0.1, type: 'square', gain: 0.2 };
-      case 'complete':
-        return { frequency: 1046, duration: 0.5, type: 'sine', gain: 0.5 };
+        return [n(660, 0.1, 0, 'square', 0.2)];
       case 'transition':
-        return { frequency: 587, duration: 0.2, type: 'triangle', gain: 0.35 };
+        return [n(587, 0.2, 0, 'triangle', 0.35)];
     }
   }
 
